@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js", 
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "David Lopez, Sergio Peña, Briannys Paez",
@@ -14,7 +14,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "mongoose": "^6.2.9",
+    "mongose": "^0.0.2-security",
     "morgan": "^1.10.0",
+    "nodemon": "^2.0.15",
     "path": "^0.12.7"
   }
 }

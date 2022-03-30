@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
+const path = require('path');
 const colors = require('colors');
+
+const { dbConectionMongo } = require('./db/mongo');
 
 class Server {
     constructor() {
@@ -15,11 +18,20 @@ class Server {
         this.users = '/user';  
         
         this.routes();
+
+        this.databases();
     
     }
 
+    async databases() {
+        await dbConectionMongo();
+    }
+        
+
     routes() {
         this.app.use(this.users, require('./routes/user.routes'));
+
+
         //configurate 404
         this.app.use((req, res, next) => {
             res.status(404).send('404 Not Found');
@@ -31,6 +43,8 @@ class Server {
         this.app.use(logger('dev'));
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+
+        this.app.use(express.static(path.join(__dirname, 'public')));   //configurate static files
     }
 
     launcher() {

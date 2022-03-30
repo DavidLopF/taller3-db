@@ -1,10 +1,17 @@
 const getUser = (req, res) => {
+    res.render('user', {
+        title: 'Sergio'
+    });
+};
+
+const postUser = (req, res) => {
     res.status(200).json({
         ok: true,
-        message: 'Get user'
+        message: 'Post user'
     });
 };
 
 module.exports = {
-    getUser
+    getUser,
+    postUser
 };

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const colors = require('colors');
 
 const dbConectionMongo = async () => {
     try{
@@ -6,7 +7,7 @@ const dbConectionMongo = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-        console.log('MongoDB connected'.green);
+        console.log(colors.blue('DB mongo connection successfull'));
     }catch(error){
         console.log(error);
     }

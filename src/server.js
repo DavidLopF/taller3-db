@@ -6,6 +6,7 @@ const colors = require('colors');
 const hbs = require('express-handlebars');
 
 const { dbConectionMongo } = require('./db/mongo');
+const DB = require('./db/postgres');
 
 class Server {
     constructor() {
@@ -24,6 +25,7 @@ class Server {
 
     async databases() {
         await dbConectionMongo();
+        const postgres = new DB();
     }
 
 

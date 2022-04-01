@@ -11,6 +11,8 @@ const postUser = (req, res) => {
     });
 };
 
+
+
 module.exports = {
     getUser,
     postUser

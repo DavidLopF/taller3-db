@@ -5,9 +5,7 @@ const bcrypt = require("bcryptjs");
 
 const { generateJSW_Buyer, generateJSW_Supplier } = require("../helpers/generate-jws");
 
-
 //____________________________________Imports__________________________________________
-
 
 
 const register =  (req, res) => {

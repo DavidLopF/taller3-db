@@ -11,9 +11,14 @@ const postUser = (req, res) => {
     });
 };
 
+const getUserLogin = (req, res) => {
+    res.render('user_login')
+}
+
 
 
 module.exports = {
     getUser,
-    postUser
+    postUser,
+    getUserLogin
 };

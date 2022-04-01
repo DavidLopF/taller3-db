@@ -5,8 +5,11 @@ const path = require('path');
 const colors = require('colors');
 const hbs = require('express-handlebars');
 
-const { dbConectionMongo } = require('./db/mongo');
-const DB = require('./db/postgres');
+const mongo = require('./db/mongo');
+const postgres = require('./db/postgres');
+const redis = require('./db/redis');
+const async = require('hbs/lib/async');
+
 
 class Server {
     constructor() {
@@ -24,8 +27,10 @@ class Server {
     }
 
     async databases() {
-        await dbConectionMongo();
-        const postgres = new DB();
+        const mongoConection =  new mongo();
+        const postgresConection = new postgres();
+        const redisConection = new redis();
+
     }
 
 

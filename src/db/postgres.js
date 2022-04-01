@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 const colors = require('colors');
 
 
-class DB {
+class PostgresConection {
     constructor() {
         try{
             this.pool = new Pool({
@@ -12,7 +12,7 @@ class DB {
                 password: process.env.DB_PASSWORD,
                 port: process.env.DB_PORT,
             });
-            console.log(colors.blue('DB postgres connection successfull'));
+            console.log(colors.green('DB postgres connection successfull'));
         } catch(err) {
             console.log(colors.red(err));
         }
@@ -30,4 +30,4 @@ class DB {
 
 }
 
-module.exports = DB;
+module.exports = PostgresConection;

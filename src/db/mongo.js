@@ -1,19 +1,29 @@
 const mongoose = require('mongoose');
 const colors = require('colors');
 
-const dbConectionMongo = async () => {
-    try{
-        await mongoose.connect(process.env.MONGO_CONECTION, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        console.log(colors.blue('DB mongo connection successfull'));
-    }catch(error){
-        console.log(error);
+class MongoConection {
+
+    //conectar a mongo por el constructor
+    constructor() {
+        try {
+            this.mongoose = mongoose.connect(process.env.MONGO_CONECTION, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            });
+
+            console.log(colors.green('DB mongo connection successfull'));
+        } catch (err) {
+            console.log(colors.red(err));
+        }
+    }
+
+    //hacer busqueda en modelos con parametro query
+    async get(model, query) {
+        return await this.mongoose.model(model).find({ query });
     }
 }
 
 
-module.exports = {
-    dbConectionMongo
-}
+
+module.exports = MongoConection;
+    

@@ -20,8 +20,11 @@ class Server {
         this.midelwares();
 
         //routes
-        this.users = '/user';
+        this.user = '/user';
+        this.auth = '/auth';
         this.routes();
+
+        //databases
         this.databases();
 
     }
@@ -35,7 +38,9 @@ class Server {
 
 
     routes() {
-        this.app.use(this.users, require('./routes/user.routes'));
+        
+        this.app.use(this.user, require('./routes/user.route'));
+        this.app.use(this.auth, require('./routes/auth.route'));
 
         this.app.get('/', (req, res) => {
             res.render('index');
@@ -45,6 +50,8 @@ class Server {
         this.app.use((req, res, next) => {
             res.status(404).send('404 Not Found');
         });
+
+      
     }
 
 

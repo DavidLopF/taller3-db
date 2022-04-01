@@ -9,7 +9,6 @@ const { generateJSW_Buyer, generateJSW_Supplier } = require("../helpers/generate
 //____________________________________Imports__________________________________________
 
 
-
 const register =  (req, res) => {
     const type = req.body.type;
 

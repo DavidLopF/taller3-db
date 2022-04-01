@@ -11,7 +11,12 @@ const postUser = (req, res) => {
     });
 };
 
+const getProduct = (req, res) => {
+    res.render('product')
+}
+
 module.exports = {
     getUser,
-    postUser
+    postUser,
+    getProduct
 };

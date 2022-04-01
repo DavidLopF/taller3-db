@@ -8,8 +8,6 @@ router.get("/registration", getUser);
 
 router.post("/post", postUser);
 
-router.get("/login", getUserLogin);
-
 
 
 

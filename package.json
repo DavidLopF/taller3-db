@@ -10,7 +10,11 @@
   "author": "David Lopez, Sergio Peña, Briannys Paez",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "bcryptjs": "^2.4.3",
+=======
+    "bulma": "^0.9.3",
+>>>>>>> 4ed6e445e5971ab1d09f805826db0b82c0510ece
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",

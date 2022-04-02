@@ -32,7 +32,7 @@ class Server {
     async databases() {
         const mongoConection =  new mongo();
         const postgresConection = new postgres();
-        const redisConection = new redis();
+        //const redisConection = new redis();
 
     }
 

@@ -26,6 +26,7 @@ const register = (req, res) => {
                 .then(result => {
 
                     const id = result.rows[0].id;
+                    const user = result.rows[0];
                     if (type == "supplier") {
                         marketplace.query(`INSERT INTO public.supplier (user_id) 
                         VALUES ('${result.rows[0].id}')`)
@@ -33,11 +34,11 @@ const register = (req, res) => {
 
                                 const token = await generateJSW_Supplier(id);
 
-                                res.status(200).json({
-                                    ok: true,
-                                    message: 'Supplier created',
+                                res.render('user', {
+                                    user,
+                                    type: 'Supplier',
                                     token
-                                })
+                                });
                             })
                     } else if (type == "buyer") {
                         marketplace.query(`INSERT INTO public.buyer (user_id) 
@@ -67,26 +68,33 @@ const getViewRegister = (req, res) => {
     res.render('auth/register');
 }
 
+const getViewLogin = (req, res) => {
+    res.render('auth/login');
+}
+
 
 const login = (req, res) => {
+    console.log(req.body);
     const { email, password } = req.body;
 
     marketplace.query(`SELECT * FROM public.user WHERE email = '${email}'`)
         .then(result => {
             if (result.rows.length > 0) {
                 const user = result.rows[0];
-
                 //validar contraseña
                 const pass = bcrypt.compareSync(password, user.password);
+
                 if (pass) {
                     marketplace.query(`SELECT * FROM public.supplier WHERE user_id = '${user.id}'`).then(async result => {
                         if (result.rows.length > 0) {
                             const token = await generateJSW_Supplier(user.id);
-                            res.status(200).json({
-                                ok: true,
-                                message: 'Supplier logged',
+
+                            res.render('user', {
+                                user,
+                                type: 'Supplier',
                                 token
-                            })
+                            });
+
                         } else {
                             marketplace.query(`SELECT * FROM public.buyer WHERE user_id = '${user.id}'`).then(async result => {
                                 if (result.rows.length > 0) {
@@ -129,5 +137,6 @@ const login = (req, res) => {
 module.exports = {
     register,
     login,
-    getViewRegister
+    getViewRegister,
+    getViewLogin
 }

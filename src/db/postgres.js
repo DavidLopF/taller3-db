@@ -9,18 +9,18 @@ class PostgresConection {
                 user: process.env.DB_USER,
                 host: process.env.DB_HOST,
                 database: process.env.DB_NAME,
-                password: process.env.DB_PASSWORD,
+                password: process.env.DB_PASS,
                 port: process.env.DB_PORT,
             });
-            console.log(colors.green('DB postgres connection successfull'));
         } catch(err) {
             console.log(colors.red(err));
         }
     }
 
-    async query(query, params) {
-        return await this.pool.query(query, params);
+    async query(query) {
+        return await this.pool.query(query);
     }
+
 
     async getAll(table) {
         const query = `SELECT * FROM ${table}`;

@@ -32,7 +32,7 @@ class Server {
     async databases() {
         const mongoConection =  new mongo();
         const postgresConection = new postgres();
-        const redisConection = new redis();
+        //const redisConection = new redis();
 
     }
 
@@ -63,7 +63,6 @@ class Server {
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.static(path.join(__dirname, 'public')));
 
-        console.log(path.join(__dirname, 'public'));
 
         this.app.engine('.hbs', hbs.engine({
             defaultLayout: 'default',

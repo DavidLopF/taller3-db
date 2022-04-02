@@ -63,7 +63,6 @@ class Server {
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.static(path.join(__dirname, 'public')));
 
-        console.log(path.join(__dirname, 'public'));
 
         this.app.engine('.hbs', hbs.engine({
             defaultLayout: 'default',

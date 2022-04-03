@@ -22,6 +22,7 @@ class Server {
         //routes
         this.user = '/user';
         this.auth = '/auth';
+        this.products = '/products';
         this.routes();
 
         //databases
@@ -41,6 +42,7 @@ class Server {
         
         this.app.use(this.user, require('./routes/user.route'));
         this.app.use(this.auth, require('./routes/auth.route'));
+        this.app.use(this.products, require('./routes/product.route'));
 
         this.app.get('/', (req, res) => {
             res.render('index');

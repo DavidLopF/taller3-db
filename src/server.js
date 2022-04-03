@@ -7,8 +7,10 @@ const hbs = require('express-handlebars');
 
 const mongo = require('./db/mongo');
 const postgres = require('./db/postgres');
+const marketplace = new postgres();
 const redis = require('./db/redis');
 const async = require('hbs/lib/async');
+const { query } = require('express');
 
 
 class Server {
@@ -43,7 +45,13 @@ class Server {
         this.app.use(this.auth, require('./routes/auth.route'));
 
         this.app.get('/', (req, res) => {
-            res.render('index');
+            const query = 'SELECT * FROM public.products'
+            marketplace.query(query).then((result) => {
+                res.render('index', {
+                    products: result.rows
+                });
+            })
+            
         });
 
         //configurate 404

@@ -74,7 +74,6 @@ const getViewLogin = (req, res) => {
 
 
 const login = (req, res) => {
-    console.log(req.body);
     const { email, password } = req.body;
 
     marketplace.query(`SELECT * FROM public.user WHERE email = '${email}'`)
@@ -83,7 +82,8 @@ const login = (req, res) => {
                 const user = result.rows[0];
                 //validar contraseña
                 const pass = bcrypt.compareSync(password, user.password);
-
+            
+            
                 if (pass) {
                     marketplace.query(`SELECT * FROM public.supplier WHERE user_id = '${user.id}'`).then(async result => {
                         if (result.rows.length > 0) {
@@ -92,6 +92,7 @@ const login = (req, res) => {
                             res.render('user', {
                                 user,
                                 type: 'Supplier',
+                                supplier:  true, 
                                 token
                             });
 
@@ -99,11 +100,12 @@ const login = (req, res) => {
                             marketplace.query(`SELECT * FROM public.buyer WHERE user_id = '${user.id}'`).then(async result => {
                                 if (result.rows.length > 0) {
                                     const token = await generateJSW_Buyer(user.id);
-                                    res.status(200).json({
-                                        ok: true,
-                                        message: 'Buyer logged',
+                                    res.render('user', {
+                                        user,
+                                        type: 'Buyer',
+                                        buyer:  true, 
                                         token
-                                    })
+                                    });
                                 } else {
                                     res.status(400).json({
                                         ok: false,
@@ -114,9 +116,9 @@ const login = (req, res) => {
                         }
                     })
                 } else {
-                    res.status(400).json({
-                        ok: false,
-                        message: 'Password incorrect'
+                    res.render('error', {
+                        message: 'Contraseña incorrecta',
+                        url: '/auth/login'
                     })
                 }
             }

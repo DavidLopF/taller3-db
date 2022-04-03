@@ -53,11 +53,11 @@ CREATE TABLE public.products(
     name VARCHAR(255) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     product_categories_id INTEGER NOT NULL,
-    FOREIGN KEY (product_categories_id) REFERENCES marketplace.product_categories(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_categories_id) REFERENCES public.product_categories(id) ON DELETE CASCADE,
     brand_id INTEGER NOT NULL,
     FOREIGN KEY (brand_id) REFERENCES public.brand(id) ON DELETE CASCADE,
-    suppilier_id INTEGER NOT NULL,
-    FOREIGN KEY (brand_id) REFERENCES public.supplier(id) ON DELETE CASCADE,   
+    supplier_id INTEGER NOT NULL,
+    FOREIGN KEY (supplier_id) REFERENCES public.supplier(id) ON DELETE CASCADE,   
     created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -85,7 +85,7 @@ CREATE TABLE public.product_details(
     product_id INTEGER NOT NULL,
     size VARCHAR(255) NOT NULL,
     color VARCHAR(255) NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES pubic.products(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES public.products(id) ON DELETE CASCADE,
     created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -157,7 +157,35 @@ CREATE TABLE public.order(
 );
 
 
-
+/* Marcas */
+insert into public.brand (id, name, country) values (default, 'Apple', 'Estados Unidos'),(default, 'Samsung', 'Corea del Sur'), (default, 'Adidas', 'Alemania'), (default, 'Microsft', 'Estados Unidos')
+/* Categorias producto */
+insert into public.product_categories (id, name, description) values 
+	(default, 'Electrodomesticos', 'Productos que ofrecen soluciones tecnológicas a tu hogar'),
+	(default, 'Ropa', 'Prendas de vestir de la mejor calidad'),
+	(default, 'Celulares', 'Los mejores celulares para que nunca te desconectes'),
+	(default, 'Chaquetas', 'Las nuevas tendencias de moda')
+/* Productos */
+/* Se debe tener creado un supplier */
+insert into public.products (id, name, price, product_categories_id, brand_id, supplier_id) values 
+	(default, 'Iphone 13',3800000, 3, 1, 1),
+	(default, 'Iphone 12',3000000, 3, 1, 1),
+	(default, 'Iphone 11',2500000, 3, 1, 1),
+	(default, 'Iphone X',2000000, 3, 1, 1),
+	(default, 'Samsung galaxy a30',800000, 3, 2, 1),
+	(default, 'Samsung galaxy flip',5800000, 3, 2, 1),
+	(default, 'Samsung galaxy note',1800000, 3, 2, 1),
+	(default, 'Samsung galaxy a70s',1400000, 3, 2, 1)
+/* Detalles de los productos */
+insert into public.product_details (id, product_id, size, color) values 
+	(default, 1, 'Pro Max', 'Negro'),
+	(default, 2, 'Pro', 'Blanco'),
+	(default, 3, 'Standar', 'Rojo'),
+	(default, 4, 'Pro Max', 'Negro'),
+	(default, 5, 'Grande', 'Rosado'),
+	(default, 6, 'Gris', 'Standar'),
+	(default, 7, 'Mini', 'Blanco'),
+	(default, 8, 'Grande', 'Gris')
 
 
 
@@ -167,6 +195,8 @@ DROP TABLE public.admin;
 DROP TABLE public.supplier;
 DROP TABLE public.buyer;
 DROP TABLE public.user;
+
+DROP
 
 
 

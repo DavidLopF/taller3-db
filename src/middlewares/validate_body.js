@@ -14,6 +14,21 @@ const validateRegisterBody = (req, res, next) => {
 }
 
 
+const validateLogin = (req, res, next) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.render('error', {
+            message: 'Llene todos los campos',
+            url: '/auth/login'
+        })
+    }
+    
+    next();
+}
+
+
 module.exports = {
-    validateRegisterBody
+    validateRegisterBody,
+    validateLogin
 }

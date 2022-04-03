@@ -47,11 +47,16 @@ class Server {
         this.app.use(this.products, require('./routes/product.route'));
 
         this.app.get('/', (req, res) => {
-            const query = 'SELECT * FROM public.products'
+            const query = 'SELECT * FROM public.products LIMIT 5'
             marketplace.query(query).then((result) => {
-                res.render('index', {
-                    products: result.rows
-                });
+                const product_categories = 'SELECT * FROM public.product_categories'
+                marketplace.query(product_categories).then((result2) => {
+                    res.render('index', {
+                        products: result.rows,
+                        categories: result2.rows
+                    });
+                })
+                
             })
             
         });

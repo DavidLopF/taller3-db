@@ -21,7 +21,7 @@ const getByCategory = (req, res) => {
 
     const id = req.params.id;
 
-    const query = `SELECT * FROM public.products WHERE product_categories_id = ${id}`;
+    const query = `SELECT * FROM public.products WHERE product_categories_id = ${id} LIMIT 5`;
 
     marketplace.query(query).then((result) => {
         res.status(200).json({

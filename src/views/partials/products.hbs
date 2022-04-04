@@ -1,26 +1,37 @@
 <div class="container shadow-lg p-3  bg-body rounded animate__animated animate__slideInUp">
     <div class="row table-success">
         <div class="col-8 mt-2">
-            <h2>products</h2>
+            <h2 id="title_filter">products</h2>
         </div>
         <div class="col mt-2">
             <select class="form-control w-75" id="category">
                 {{#each categories}}
-                    <option value="">{{name}}</option>
+                <option value={{id}}>{{name}}</option>
                 {{/each}}
             </select>
         </div>
     </div>
     <hr>
+
+    <div class="row">
+        <div class="columns" id="products_filter">
+
+        </div>
+    </div>
+
+
 </div>
 <div class="container shadow-lg p-3 mt-6">
     <h1>Ofertas</h1>
-    <div class="row"> 
+    <div class="row">
         <div class="columns">
             {{#each products}}
             <div class="column">
                 <div class="card">
-                    <a href="/products/{{id}}"><h1 class="has-text-centered mt-5 has-text-weight-bold is-family-primary has-text-info">{{name}}</h1></a>
+                    <a href="/products/{{id}}">
+                        <h1 class="has-text-centered mt-5 has-text-weight-bold is-family-primary has-text-info">{{name}}
+                        </h1>
+                    </a>
                     <div class="card-content">
                         <img src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70"
                             alt="">
@@ -28,8 +39,9 @@
                     <footer class="card-footer">
                         <p class="card-footer-item">
                             <span>
-                                Price: <o>${{price}}</p>
-                            </span>
+                                Price: <o>${{price}}
+                        </p>
+                        </span>
                         </p>
                         <p class="card-footer-item">
                             <span>
@@ -47,14 +59,6 @@
 </div>
 
 
-
-
-
-
-
-
-
-
 <div class="container shadow-lg p-3 mt-6">
     <h1>Te puede interesar</h1>
     <div class="row">
@@ -68,8 +72,9 @@
                     <footer class="card-footer">
                         <p class="card-footer-item">
                             <span>
-                                Price: <o>$500.000</p>
-                            </span>
+                                Price: <o>$500.000
+                        </p>
+                        </span>
                         </p>
                         <p class="card-footer-item">
                             <span>
@@ -88,8 +93,9 @@
                     <footer class="card-footer">
                         <p class="card-footer-item">
                             <span>
-                                Price: <o>$500.000</p>
-                            </span>
+                                Price: <o>$500.000
+                        </p>
+                        </span>
                         </p>
                         <p class="card-footer-item">
                             <span>
@@ -108,8 +114,9 @@
                     <footer class="card-footer">
                         <p class="card-footer-item">
                             <span>
-                                Price: <o>$500.000</p>
-                            </span>
+                                Price: <o>$500.000
+                        </p>
+                        </span>
                         </p>
                         <p class="card-footer-item">
                             <span>
@@ -128,8 +135,9 @@
                     <footer class="card-footer">
                         <p class="card-footer-item">
                             <span>
-                                Price: <o>$500.000</p>
-                            </span>
+                                Price: <o>$500.000
+                        </p>
+                        </span>
                         </p>
                         <p class="card-footer-item">
                             <span>
@@ -147,9 +155,10 @@
                     </div>
                     <footer class="card-footer">
                         <p class="card-footer-item">
-                           <span>
-                                Price: <o>$500.000</p>
-                            </span>
+                            <span>
+                                Price: <o>$500.000
+                        </p>
+                        </span>
                         </p>
                         <p class="card-footer-item">
                             <span>
@@ -168,10 +177,65 @@
 
 
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+
+
 
 <script>
     const category = document.querySelector('#category');
+
     category.addEventListener('change', (e) => {
-        alert(e.target.value);
+        const products_filter = document.querySelector('#products_filter');
+
+        while (products_filter.firstChild) {
+            products_filter.removeChild(products_filter.firstChild);
+        }
+
+        const categoryId = e.target.value;
+        const settings = {
+            url: "/products/category/" + categoryId,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }
+
+        $.ajax(settings).done(function (response) {
+
+            const products = response.products;
+
+            products.forEach(product => {
+
+                const product_item = `
+                <div class="column">
+                <div class="card">
+                    <a href="product.html?id=${product.id}">
+                        <h1 class="has-text-centered mt-5 has-text-weight-bold is-family-primary has-text-info">${product.name}
+                        </h1>
+                    </a>
+                    <div class="card-content">
+                        <img src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70"
+                            alt="">
+                    </div>
+                    <footer class="card-footer">
+                        <p class="card-footer-item">
+                            <span>
+                                Price: <o>${product.price}
+                        </p>
+                        </span>
+                        </p>
+                        <p class="card-footer-item">
+                            <span>
+                                About <a href="#">${product.supplier_id}</a>
+                            </span>
+                        </p>
+                    </footer>
+                </div>`
+
+                products_filter.innerHTML += product_item;
+            });
+
+        });
     });
 </script>

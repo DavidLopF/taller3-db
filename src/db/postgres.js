@@ -4,15 +4,14 @@ const colors = require('colors');
 
 class PostgresConection {
     constructor() {
-        try{
+
+        const uri = 'postgres://gzbuvbqlqjbicm:d660032ea0be576a79e1a650218224d1e8a50f656bdbb0050f7ccdb6fc12d125@ec2-3-217-251-77.compute-1.amazonaws.com:5432/dbb96874eh79b'
+        try {
             this.pool = new Pool({
-                user: process.env.DB_USER,
-                host: process.env.DB_HOST,
-                database: process.env.DB_NAME,
-                password: process.env.DB_PASS,
-                port: process.env.DB_PORT,
+                connectionString: uri,
+                ssl: { rejectUnauthorized: false }
             });
-        } catch(err) {
+        } catch (err) {
             console.log(colors.red(err));
         }
     }

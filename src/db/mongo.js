@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const colors = require('colors');
 
 class MongoConection {
-
-    //conectar a mongo por el constructor
     constructor() {
         try {
             this.mongoose = mongoose.connect(process.env.MONGO_CONECTION, {
@@ -17,7 +15,12 @@ class MongoConection {
         }
     }
 
-    //hacer busqueda en modelos con parametro query
+    async insert(model, data) {
+        const result = await model.create(data);
+        return result;
+    }
+
+    
     async get(model, query) {
         return await this.mongoose.model(model).find({ query });
     }
@@ -26,4 +29,4 @@ class MongoConection {
 
 
 module.exports = MongoConection;
-    
+

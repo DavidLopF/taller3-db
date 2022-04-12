@@ -157,16 +157,17 @@ CREATE TABLE public.order(
 );
 
 
-/* Marcas */
-insert into public.brand (id, name, country) values (default, 'Apple', 'Estados Unidos'),(default, 'Samsung', 'Corea del Sur'), (default, 'Adidas', 'Alemania'), (default, 'Microsft', 'Estados Unidos')
-/* Categorias producto */
+insert into public.brand (id, name, country) values (default, 'Apple', 'Estados Unidos'),(default, 'Samsung', 'Corea del Sur'), (default, 'Adidas', 'Alemania'), (default, 'Microsft', 'Estados Unidos');
+
+
 insert into public.product_categories (id, name, description) values 
 	(default, 'Electrodomesticos', 'Productos que ofrecen soluciones tecnológicas a tu hogar'),
 	(default, 'Ropa', 'Prendas de vestir de la mejor calidad'),
 	(default, 'Celulares', 'Los mejores celulares para que nunca te desconectes'),
-	(default, 'Chaquetas', 'Las nuevas tendencias de moda')
-/* Productos */
-/* Se debe tener creado un supplier */
+	(default, 'Chaquetas', 'Las nuevas tendencias de moda');
+
+
+
 insert into public.products (id, name, price, product_categories_id, brand_id, supplier_id) values 
 	(default, 'Iphone 13',3800000, 3, 1, 1),
 	(default, 'Iphone 12',3000000, 3, 1, 1),
@@ -175,8 +176,10 @@ insert into public.products (id, name, price, product_categories_id, brand_id, s
 	(default, 'Samsung galaxy a30',800000, 3, 2, 1),
 	(default, 'Samsung galaxy flip',5800000, 3, 2, 1),
 	(default, 'Samsung galaxy note',1800000, 3, 2, 1),
-	(default, 'Samsung galaxy a70s',1400000, 3, 2, 1)
-/* Detalles de los productos */
+	(default, 'Samsung galaxy a70s',1400000, 3, 2, 1);
+
+
+
 insert into public.product_details (id, product_id, size, color) values 
 	(default, 1, 'Pro Max', 'Negro'),
 	(default, 2, 'Pro', 'Blanco'),
@@ -185,19 +188,14 @@ insert into public.product_details (id, product_id, size, color) values
 	(default, 5, 'Grande', 'Rosado'),
 	(default, 6, 'Gris', 'Standar'),
 	(default, 7, 'Mini', 'Blanco'),
-	(default, 8, 'Grande', 'Gris')
+	(default, 8, 'Grande', 'Gris');
 
 
 
 
-//borrar tablas
-DROP TABLE public.admin;
-DROP TABLE public.supplier;
-DROP TABLE public.buyer;
-DROP TABLE public.user;
+//borrar SCHEMA
 
-DROP
-
+DROP SCHEMA public
 
 
 

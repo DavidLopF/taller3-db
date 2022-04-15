@@ -4,7 +4,7 @@
             <div class="columns">
                 <div class="column is-5">
                     <div class="card">
-                        <img src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70"
+                        <img id="image" src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70"
                             alt="Description">
                     </div>
                 </div>
@@ -59,11 +59,29 @@
     </div>
 </div>
 
+<div class="modal rounded" id="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__slideInUp">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Alert</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <p>product add to the  shopping cart</p>
+        </section>
+        <button class="modal-close is-large" id="close" aria-label="close"></button>
+    </div>
+</div>
+
+
 
 <script>
 
     const add = document.getElementById('add');
     const token  =  localStorage.getItem('token');
+    const image = document.getElementById('image');
+    const src = image.src;
+
 
 
     add.addEventListener('click', () => {
@@ -74,6 +92,7 @@
                 name: '{{product.name}}',
                 price :  '{{product.price}}',
                 color: '{{product_detail.color}}',
+                image: src
             }, 
                       
         }
@@ -92,6 +111,17 @@
                 if(!res.ok){
                     window.location.href = "/shop_cart/error";
                 }
+
+                const modal = document.getElementById('modal');
+                modal.classList.add('is-active');
+                setTimeout(() => {
+                    modal.classList.remove('is-active');
+                }, 2000);
+
+                const close = document.getElementById('close');
+                close.addEventListener('click', () => {
+                    modal.classList.remove('is-active');
+                });
 
                 console.log(res);
             })

@@ -8,8 +8,6 @@ const addProduct = async (req, res) => {
     const { product } = req.body
 
     const getShoppingCart = await cache.get(`shopping_cart_${uid}`)
-
-
     if (getShoppingCart) {
 
         const shopingcart = JSON.parse(getShoppingCart)
@@ -54,8 +52,30 @@ const addProduct = async (req, res) => {
         }
 
     }
+}
 
 
+const getShoppingCart = async (req, res) => {
+    let token = req.headers.authorization.split(" ")[1];
+    const { uid } = jwt.verify(token, process.env.TOKEN_BUYER);
+
+    const getShoppingCart = await cache.get(`shopping_cart_${uid}`)
+    if (getShoppingCart) {
+        res.status(200).json({
+            ok: true,
+            message: 'shopping cart',
+            shopping_cart: JSON.parse(getShoppingCart)
+        })
+    } else {
+        res.status(200).json({
+            ok: true,
+            message: 'shopping cart',
+            shopping_cart: {
+                user_id: uid,
+                products: []
+            }
+        })
+    }
 }
 
 
@@ -68,6 +88,7 @@ const getError = (req, res) => {
 
 module.exports = {
     addProduct,
-    getError
+    getError,
+    getShoppingCart
 }
 

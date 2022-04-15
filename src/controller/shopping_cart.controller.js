@@ -18,6 +18,7 @@ const addProduct = async (req, res) => {
             product_price: product.price,
             product_quantity: product.quantity,
             product_color: product.color,
+            product_image: product.image
         })
 
         cache.add_shoppingCart(`shopping_cart_${uid}`, JSON.stringify(shopingcart))
@@ -36,6 +37,7 @@ const addProduct = async (req, res) => {
                 product_price: product.price,
                 product_quantity: product.quantity,
                 product_color: product.color,
+                product_image: product.image
             }]
         }
         const temp = await cache.add_shoppingCart('shopping_cart_' + uid, JSON.stringify(shopingcart));

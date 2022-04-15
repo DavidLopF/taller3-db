@@ -33,16 +33,16 @@ class RedisConection {
         return await this.client.get(key);
     }
 
-    async set(key, value) {
-        return await this.client.get(key, value);
-    }
-
-    async del(key) {
-        return await this.client.del(key);
-    }
 
     async add(key, value) {
-        return await this.client.sadd(key, value);
+        try {
+            await this.client.set(key, value);
+            await this.client.expire(key, 600);
+            return true
+        } catch (err) {
+            console.log(colors.red(err));
+            return false
+        }
     }
 }
 

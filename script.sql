@@ -193,9 +193,9 @@ insert into public.product_details (id, product_id, size, color) values
 
 
 
-//borrar SCHEMA
+/* borrar tablas */
 
-DROP SCHEMA public
+DROP SCHEMA public CASCADE
 
 
 

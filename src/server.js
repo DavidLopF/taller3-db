@@ -4,13 +4,8 @@ const logger = require('morgan');
 const path = require('path');
 const colors = require('colors');
 const hbs = require('express-handlebars');
-
-const mongo = require('./db/mongo');
 const postgres = require('./db/postgres');
 const marketplace = new postgres();
-const redis = require('./db/redis');
-const async = require('hbs/lib/async');
-const { query } = require('express');
 
 
 class Server {
@@ -26,19 +21,7 @@ class Server {
         this.auth = '/auth';
         this.products = '/products';
         this.routes();
-
-        //databases
-        this.databases();
-
     }
-
-    async databases() {
-        const mongoConection =  new mongo();
-        const postgresConection = new postgres();
-        //const redisConection = new redis();
-
-    }
-
 
     routes() {
         
@@ -69,8 +52,6 @@ class Server {
       
     }
 
-
-
     midelwares() {
         this.app.use(cors());
         this.app.use(logger('dev'));
@@ -90,8 +71,6 @@ class Server {
         this.app.set('views', path.join(__dirname, 'views'));
 
     }
-
-
 
     launcher() {
         this.Server.listen(this.port, () => {

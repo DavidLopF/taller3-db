@@ -203,6 +203,8 @@
 
         $.ajax(settings).done(function (response) {
 
+            console.log(response);
+
             const products = response.products;
 
             products.forEach(product => {

@@ -1,5 +1,9 @@
 const postgres = require('../db/postgres');
 const marketplace = new postgres();
+const Cache = require('../db/redis');
+const cache = new Cache();
+const colors = require('colors');
+//_________________________imports___________________________________________________
 
 getViewProduct = function (req, res) {
 
@@ -17,19 +21,40 @@ getViewProduct = function (req, res) {
     });
 }
 
-const getByCategory = (req, res) => {
+const getByCategory = async (req, res) => {
 
     const id = req.params.id;
 
-    const query = `SELECT * FROM public.products WHERE product_categories_id = ${id}`;
+    try {
+        const queryCache = await cache.get(`product_category_${id}`);
 
-    marketplace.query(query).then((result) => {
-        res.status(200).json({
-            ok: true,
-            products: result.rows
+        if (queryCache) {
+            res.status(200).json({
+                ok: true,
+                products: JSON.parse(queryCache)
+            });
+        } else {
+            const query = `SELECT * FROM public.products WHERE product_categories_id = ${id}`;
+
+            marketplace.query(query).then((result) => {
+                cache.add('product_category_' + id, JSON.stringify(result.rows));
+                res.status(200).json({
+                    ok: true,
+                    products: result.rows
+                });
+            });
+        }
+
+    } catch (err) {
+        console.log(colors.bgRed.white(err));
+        res.status(500).json({
+            ok: false,
+            err
         });
-    });
+    }
 }
+
+//________________________________end methods_______________________________________
 
 module.exports = {
     getViewProduct,

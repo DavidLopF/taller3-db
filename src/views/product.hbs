@@ -81,6 +81,7 @@
     const token  =  localStorage.getItem('token');
     const image = document.getElementById('image');
     const src = image.src;
+    console.log(src);
 
 
 
@@ -116,7 +117,7 @@
                 modal.classList.add('is-active');
                 setTimeout(() => {
                     modal.classList.remove('is-active');
-                }, 2000);
+                }, 3000);
 
                 const close = document.getElementById('close');
                 close.addEventListener('click', () => {

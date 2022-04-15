@@ -12,7 +12,11 @@ class Server {
     constructor() {
         this.port = process.env.PORT || 3000;
         this.app = express();
+
+
+
         this.Server = require('http').createServer(this.app);
+
 
         this.midelwares();
 
@@ -20,14 +24,16 @@ class Server {
         this.user = '/user';
         this.auth = '/auth';
         this.products = '/products';
+        this.shopping_cart = '/shop_cart';
         this.routes();
     }
 
     routes() {
-        
+
         this.app.use(this.user, require('./routes/user.route'));
         this.app.use(this.auth, require('./routes/auth.route'));
         this.app.use(this.products, require('./routes/product.route'));
+        this.app.use(this.shopping_cart, require('./routes/shopping_cart.route'));
 
         this.app.get('/', (req, res) => {
             const query = 'SELECT * FROM public.products LIMIT 5'
@@ -39,9 +45,9 @@ class Server {
                         categories: result2.rows
                     });
                 })
-                
+
             })
-            
+
         });
 
         //configurate 404
@@ -49,15 +55,15 @@ class Server {
             res.status(404).send('404 Not Found');
         });
 
-      
+
     }
 
     midelwares() {
         this.app.use(cors());
         this.app.use(logger('dev'));
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.static(path.join(__dirname, 'public')));
+        this.app.use(express.urlencoded({ extended: true })); //Esto es para formData
+        this.app.use(express.json())
 
 
         this.app.engine('.hbs', hbs.engine({

@@ -9,10 +9,10 @@ const ValidateUniqueUser = (req, res, next) => {
             if (result.rowCount === 0) {
                 next();
             } else {
-                res.status(400).json({
-                    ok: false,
-                    message: 'User already exists'
-                })
+                res.render('error', {
+                    message: 'User already exists, plase user another email and dni',
+                    url: '/auth/login'
+                });
             }
         }
     )

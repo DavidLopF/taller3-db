@@ -7,7 +7,7 @@
             <button class="delete" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-            <p>Como tu rol es {{type}} ahora puedes publicar tus productos</p>
+            <p>You are a supplier, u can public your products</p>
         </section>
         <button class="modal-close is-large" id="close" aria-label="close"></button>
     </div>
@@ -30,12 +30,6 @@
 </div>
 
 {{/if}}
-
-
-
-
-
-
 <script>
     const button = document.getElementById('abrir-modal');
     const close = document.getElementById('close');
@@ -43,5 +37,9 @@
     close.addEventListener('click', () => {
         document.querySelector('.modal').classList.remove('is-active');
     });
+
+
+    //guardar en el local storage el token 
+    localStorage.setItem('token', '{{token}}');
 
 </script>

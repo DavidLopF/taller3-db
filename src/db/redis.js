@@ -18,10 +18,6 @@ class RedisConection {
             maxRetriesPerRequest: 3,
         });
 
-        cliente.on('connect', () => {
-            console.log(colors.green('Redis connection successfull'));
-        });
-
         cliente.on('error', (err) => {
             console.log(colors.red(err));
         });

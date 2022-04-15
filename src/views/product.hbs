@@ -4,7 +4,8 @@
             <div class="columns">
                 <div class="column is-5">
                     <div class="card">
-                        <img src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70" alt="Description">
+                        <img src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70"
+                            alt="Description">
                     </div>
                 </div>
                 <div class="column is-6">
@@ -22,19 +23,25 @@
                             <button class="button is-success is-outlined">64 GB</button>
                             <button class="button is-success is-outlined">128 GB</button>
                             <button class="button is-success is-outlined">256 GB</button>
-                            
+
                             <p class="subtitle is-7" style="padding-top: 3%;">
                                 Color: {{product_detail.color}}
                             </p>
                             <div>
-                                <input type="image" src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70" style="width: 70px; height:70px; border-bottom: 1px solid black;"/>
-                                <input type="image" src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70" style="width: 70px; height:70px; border-bottom: 1px solid black;"/>
-                                <input type="image" src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70" style="width: 70px; height:70px; border-bottom: 1px solid black;"/>
+                                <input type="image"
+                                    src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70"
+                                    style="width: 70px; height:70px; border-bottom: 1px solid black;" />
+                                <input type="image"
+                                    src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70"
+                                    style="width: 70px; height:70px; border-bottom: 1px solid black;" />
+                                <input type="image"
+                                    src="https://falabella.scene7.com/is/image/FalabellaCO/19604512_1?wid=800&hei=800&qlt=70"
+                                    style="width: 70px; height:70px; border-bottom: 1px solid black;" />
                             </div> <br>
                             <p>
                                 <button class="button is-info">Buy now</button>
-                                <button class="button is-info">
-                                   <span class="material-icons-outlined">
+                                <button id="add" class="button is-info">
+                                    <span class="material-icons-outlined">
                                         add_shopping_cart
                                     </span>
                                     Add to cart
@@ -51,3 +58,35 @@
         </div>
     </div>
 </div>
+
+
+<script>
+
+    const add = document.getElementById('add');
+    const id = '{{product.id}}';
+    console.log(id);
+
+    add.addEventListener('click', () => {
+        const url = '/shop_cart/add'
+        const data = {
+            id: id,
+            quantity: 1
+        }
+
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+            }).catch(err => {
+                console.log(err);
+            })
+    });
+
+</script>

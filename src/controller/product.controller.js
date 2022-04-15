@@ -13,6 +13,7 @@ getViewProduct = function (req, res) {
     marketplace.query(query).then((result) => {
         const product_detail = 'SELECT * FROM public.product_details WHERE product_id = ' + id;
         marketplace.query(product_detail).then((result2) => {
+
             res.render(`product`, {
                 product: result.rows[0],
                 product_detail: result2.rows[0]
@@ -35,7 +36,6 @@ const getByCategory = async (req, res) => {
             });
         } else {
             const query = `SELECT * FROM public.products WHERE product_categories_id = ${id}`;
-
             marketplace.query(query).then((result) => {
                 cache.add('product_category_' + id, JSON.stringify(result.rows));
                 res.status(200).json({
@@ -44,7 +44,6 @@ const getByCategory = async (req, res) => {
                 });
             });
         }
-
     } catch (err) {
         console.log(colors.bgRed.white(err));
         res.status(500).json({

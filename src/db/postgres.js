@@ -14,6 +14,7 @@ class PostgresConection {
         } catch (err) {
             console.log(colors.red(err));
         }
+
     }
 
     async query(query) {

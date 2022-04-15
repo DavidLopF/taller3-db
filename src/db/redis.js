@@ -2,7 +2,6 @@ const redis = require('ioredis');
 const colors = require('colors');
 
 class RedisConection {
-
     constructor() {
         this.client = this.connect();
     }
@@ -29,11 +28,25 @@ class RedisConection {
         return await this.client.get(key);
     }
 
+    async append(key, value) {
+        return await this.client.append(key, value);
+    }
 
-    async add(key, value) {
+    async add_listProducts(key, value) {
         try {
             await this.client.set(key, value);
             await this.client.expire(key, 600);
+            return true
+        } catch (err) {
+            console.log(colors.red(err));
+            return false
+        }
+    }
+
+    async add_shoppingCart(key, shopingcart) {
+        try {
+            await this.client.set(key, shopingcart);
+            await this.client.expire(key, 3600);
             return true
         } catch (err) {
             console.log(colors.red(err));

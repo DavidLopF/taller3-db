@@ -63,29 +63,37 @@
 <script>
 
     const add = document.getElementById('add');
-    const id = '{{product.id}}';
-    console.log(id);
+    const token  =  localStorage.getItem('token');
+
 
     add.addEventListener('click', () => {
         const url = '/shop_cart/add'
         const data = {
-            id: id,
-            quantity: 1
+            product : {
+                id : {{product.id}},
+                name: '{{product.name}}',
+                price :  '{{product.price}}',
+                color: '{{product_detail.color}}',
+            }, 
+                      
         }
 
         fetch(url, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
-                'Content-Type': 'application/json'
+                'authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json' 
             }
         })
 
             .then(res => res.json())
             .then(res => {
+                if(!res.ok){
+                    window.location.href = "/shop_cart/error";
+                }
+
                 console.log(res);
-            }).catch(err => {
-                console.log(err);
             })
     });
 

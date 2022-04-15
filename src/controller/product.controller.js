@@ -36,7 +36,7 @@ const getByCategory = async (req, res) => {
         } else {
             const query = `SELECT * FROM public.products WHERE product_categories_id = ${id}`;
             marketplace.query(query).then((result) => {
-                cache.add('product_category_' + id, JSON.stringify(result.rows));
+                cache.add_listProducts('product_category_' + id, JSON.stringify(result.rows));
                 res.status(200).json({
                     ok: true,
                     products: result.rows

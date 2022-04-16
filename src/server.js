@@ -25,6 +25,7 @@ class Server {
         this.auth = '/auth';
         this.products = '/products';
         this.shopping_cart = '/shop_cart';
+        this.order = '/order';
         this.routes();
     }
 
@@ -34,6 +35,7 @@ class Server {
         this.app.use(this.auth, require('./routes/auth.route'));
         this.app.use(this.products, require('./routes/product.route'));
         this.app.use(this.shopping_cart, require('./routes/shopping_cart.route'));
+        this.app.use(this.order, require('./routes/order.route'));
 
         this.app.get('/', (req, res) => {
             const query = 'SELECT * FROM public.products LIMIT 5'

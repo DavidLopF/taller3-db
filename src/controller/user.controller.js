@@ -19,10 +19,15 @@ const getCart = (req, res) => {
     res.render('cart')
 }
 
+const getProcess = (req, res) => {
+    res.render('process')
+}
+
 
 module.exports = {
     getUser,
     getUserLogin,
     getPurchase,
-    getCart
+    getCart,
+    getProcess
 };

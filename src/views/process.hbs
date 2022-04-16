@@ -1,0 +1,242 @@
+ <section class="container">
+      <div class="columns is-multiline">
+        <div class="column is-12 register">
+          <div class="columns">
+            <div class="column left" id="left">
+              <div class="card-content">
+                <h1 class="title is-3">Checkout Process</h1>
+                <h2 class="subtitle colored is-4">Tus productos</h2>
+                <div class="card-table">
+                    <div class="content">
+                        <table class="table is-fullwidth is-striped">
+                            <thead>
+                                <tr class="has-text-centered">
+                                    <th>
+                                        <div class="level-right">
+                                            Image
+                                        </div>
+                                    </th>
+
+                                    <th>
+                                        <div class="level-right">
+                                            Name
+                                        </div>
+                                    </th>
+
+                                    <th>
+                                        <div class="level-right">
+                                            Quantity
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="level-right">
+                                            Price
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="checkout_table">
+                            </tbody>
+                        </table>
+                        <div class="total">
+                                <div>
+                                    <div class="Subtotal">Sub-Total</div>
+                                    <div class="items" id="items"></div>
+                                </div>
+                                <div class="total-amount" id="total-price"></div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="column right has-text-centered">
+              <h1 class="title is-4">Completa los datos</h1>
+              <form>
+                <div class="field ">
+                    <label class="label has-text-left">Ingrese la ciudad</label>
+                    <div class="select is-left" style="width: 100%">
+                        <select id="city" name="city" style="width: 100%">
+                            <option>Bogotá</option>
+                            <option>Medellin</option>
+                            <option>Cali</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label has-text-left">Ingrese la dirección</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Dirección" id="name">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label has-text-left">Método de pago</label>
+                    <div class="control">
+                        <div class="select is-left" style="width: 100%">
+                            <select id="payment" name="payment" style="width: 100%">
+                                <option>Tarjeta de crédito</option>
+                                <option>Tarjeta de débito</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <input class="input" type="number" placeholder="Número de tarjeta" id="card_number">
+                    </div>
+                    <div class="control is-flex">
+                        <input class="input" type="date" placeholder="MM/YY" id="name">
+                        <input class="input" type="text" placeholder="CVC" id="name">
+                    </div>
+                </div>
+                <button class="button is-block is-primary is-fullwidth is-medium">Submit</button>
+                <br />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+        const token = localStorage.getItem('token');
+        console.log(token)
+        const url = '/shop_cart/';
+
+        const data = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        const calculateTotal = (products) => {
+            const total = document.getElementById('total-price');
+            let total_price = 0;
+
+            products.forEach((product) => {
+                total_price += parseInt(product.product_price);
+            })
+
+            total.innerHTML = `${total_price}`;
+
+        }
+         fetch(url, data)
+            .then(res => res.json())
+            .then(res => {
+                res.shopping_cart.products.forEach((product) => {
+                    console.log(product)
+                    const table = document.getElementById('checkout_table');
+                    table.innerHTML += `
+                            <tr class="has-text-centered">
+                                            <td width="5%">
+                                                <img src="${product.product_image}"
+                                                    alt="">
+                                            </td>
+                                            <td>
+                                                <div class="level-right">
+                                                    <p>
+                                                        <strong id="price-product">${product.product_name}</strong>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="level-right">
+                                                    
+                                                    <h6 class="count"
+                                                        style="padding-top: 5%; padding-left: 5%; padding-right: 5%;">1
+                                                    </h6>
+                                                    
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="level-right">
+                                                    <p>
+                                                        <strong>${product.product_price}</strong>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                        
+                        `
+                })
+                calculateTotal(res.shopping_cart.products);
+            })
+            
+    </script>
+     <style>
+    :root {
+      --brandColor: hsl(166, 67%, 51%);
+      --infoColor: hsl(240, 76%, 71%);
+      --background: rgb(247, 247, 247);
+      --textDark: hsla(0, 0%, 0%, 0.66);
+      --textLight: hsla(0, 0%, 0%, 0.33);
+    }
+    .field:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+
+    .register {
+      margin-top: 10rem;
+      background: white;
+      border-radius: 10px;
+    }
+
+    .left,
+    .right {
+      padding: 4.5rem;
+    }
+
+    .left {
+      border-right: 5px solid var(--background);
+    }
+
+    .left .title {
+      font-weight: 800;
+      letter-spacing: -2px;
+    }
+
+    .left .colored {
+      color: var(--infoColor);
+      font-weight: 500;
+      margin-top: 1rem !important;
+      letter-spacing: -1px;
+    }
+
+    .left p {
+      color: var(--textLight);
+      font-size: 1.15rem;
+    }
+
+    .right .title {
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .right .description {
+      margin-top: 1rem;
+      margin-bottom: 1rem !important;
+      color: var(--textLight);
+      font-size: 1.15rem;
+    }
+
+    .right small {
+      color: var(--textLight);
+    }
+
+    input {
+      font-size: 1rem;
+    }
+
+    input:focus {
+      border-color: var(--brandColor) !important;
+      box-shadow: 0 0 0 1px var(--brandColor) !important;
+    }
+
+    .image{
+        max-width: ;
+    }
+
+    .fab,
+    .fas {
+      color: var(--textLight);
+      margin-right: 1rem;
+    }
+
+  </style>

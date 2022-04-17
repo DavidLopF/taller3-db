@@ -176,6 +176,14 @@
             document.getElementById('close').addEventListener('click', function () {
                 document.getElementById('modal').classList.remove('is-active');
             });
+
+        } else if(shoppingCart.length == 0){
+            document.getElementById('modal').classList.add('is-active');
+            document.getElementById('msg_modal').innerHTML = 'No hay productos en el carrito';
+            document.getElementById('close').addEventListener('click', function () {
+                document.getElementById('modal').classList.remove('is-active');
+            });
+    
         } else {
 
             address = await getLatLng(address.value)

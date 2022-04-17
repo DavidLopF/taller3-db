@@ -7,6 +7,8 @@ const getUser = (req, res) => {
 };
 
 
+
+
 const getUserLogin = (req, res) => {
     res.render('user_login')
 }

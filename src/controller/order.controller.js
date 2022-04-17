@@ -33,7 +33,7 @@ const getAllOrders = function (req, res) {
 
 const createOrder = async (req, res) => {
 
-    const { shoppingCart, payment, city, address } = req.body;
+    const { shoppingCart, payment, address } = req.body;
 
     if (shoppingCart.length !== 0) {
         let token = req.headers.authorization.split(" ")[1];

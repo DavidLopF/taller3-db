@@ -93,60 +93,126 @@
     </div>
 </section>
 
+<div class="modal rounded" id="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__slideInUp">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Alert</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <p id="msg_modal"></p>
+        </section>
+        <button class="modal-close is-large" id="close" aria-label="close"></button>
+    </div>
+</div>
+
+
+<script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRujBBR7smNV8d_DYuABXbWAYlVvED0wY"></script>
 <script>
     const shoppingCart = JSON.parse(localStorage.getItem('shopping_cart'));
     const order = document.getElementById('order');
     let city = document.getElementById('city');
     city = city.options[city.selectedIndex].value;
-    const address = document.getElementById('address');
+    let address = document.getElementById('address');
     let method_payment = document.getElementById('method_payment');
     method_payment = method_payment.options[method_payment.selectedIndex].value;
     const card_number = document.getElementById('card_number');
     const date_expired = document.getElementById('date_expired');
     const cvc = document.getElementById('cvc');
     const token1 = localStorage.getItem('token');
-    let total = document.getElementById('total-price');
-    total = total.innerHTML;
 
-    console.log(total);
+    function getLatLng(address) {
+        console.log(address);
+        return new Promise(function (resolve, reject) {
+            let geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+                'address': address + ', ' + city
+            }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    console.log(results[0].geometry.location);
+                    const location = {
+                        lat: results[0].geometry.location.lat(),
+                        lng: results[0].geometry.location.lng()
 
+                    }
+                    resolve(location);
 
-    order.addEventListener('click', () => {
-
-        const data1 = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token1}`
-            },
-            body: JSON.stringify({
-                shoppingCart: shoppingCart,
-                city: city,
-                address: address.value,
-                payment: {
-                    method: method_payment,
-                    card_number: card_number.value,
-                    date_expired: date_expired.value,
-                    cvc: cvc.value,
-                    price: total.innerHTML
-                },
-            })
-        };
-
-        fetch('/order/create', data1)
-            .then(response => response.json())
-            .then(data => {
-                //aqui va el codigo para redireccionar a la pagina de order
-                console.log(data.order_id);
-                if (data.ok) {
-                    localStorage.removeItem('shopping_cart');
-                    window.location.href = '/order/' + data.order_id;
                 } else {
-                    console.log(data);
-                    alert("error");
+                    reject(status);
                 }
-            })
-            .catch(error => console.error("paia"));
+            });
+        });
+    }
+
+
+
+    order.addEventListener('click', async () => {
+
+
+        if (address.value == '' || city == '' || method_payment == '' || card_number.value == '' || date_expired.value == '' || cvc.value == '') {
+
+
+            document.getElementById('modal').classList.add('is-active');
+            document.getElementById('msg_modal').innerHTML = 'Por favor llene todos los campos';
+            document.getElementById('close').addEventListener('click', function () {
+                document.getElementById('modal').classList.remove('is-active');
+            });
+
+        } else if (card_number.value.length < 16) {
+            document.getElementById('modal').classList.add('is-active');
+            document.getElementById('msg_modal').innerHTML = 'Por favor ingrese un número de tarjeta válido';
+            document.getElementById('close').addEventListener('click', function () {
+                document.getElementById('modal').classList.remove('is-active');
+            });
+        } else {
+
+            address = await getLatLng(address.value)
+            console.log(address);
+
+            const data1 = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token1}`
+                },
+                body: JSON.stringify({
+                    shoppingCart: shoppingCart,
+                    address: address,
+                    payment: {
+                        method: method_payment,
+                        card_number: card_number.value,
+                        date_expired: date_expired.value,
+                        cvc: cvc.value,
+                        price: total.innerHTML
+                    },
+                })
+            };
+
+
+
+            /*fetch('/order/create', data1)
+                    .then(response => response.json())
+                    .then(data => {
+                        //aqui va el codigo para redireccionar a la pagina de order
+                        if (data.ok) {
+                            localStorage.removeItem('shopping_cart');
+                            window.location.href = '/order/' + data.order_id;
+                        } else {
+                            console.log(data.error);
+                            document.getElementById('modal').classList.add('is-active');
+                            document.getElementById('msg_modal').innerHTML = data.errors[0].msg
+        
+                            document.getElementById('close').addEventListener('click', () => {
+                                document.getElementById('modal').classList.remove('is-active');
+                            })
+        
+        
+                        }
+                    })
+                    .catch(error => console.error("paila"));*/
+        }
     })
 
 

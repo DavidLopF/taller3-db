@@ -22,3 +22,5 @@
    
         npm start
 4. Se implemento el api de google para javascript con el fin de tomar la latitud y la longitud al momento de ralizar la compra. 
+
+5. link del video de la sustentación : https://youtu.be/8Ii0usdRTgE

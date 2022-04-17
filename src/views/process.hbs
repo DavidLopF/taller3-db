@@ -137,15 +137,15 @@
             .then(response => response.json())
             .then(data => {
                 //aqui va el codigo para redireccionar a la pagina de order
-
                 if (data.ok) {
-                    localStorage.removeItem('shopping_cart');
+                    //localStorage.removeItem('shopping_cart');
                     window.location.href = '/order/' + data.order_id;
                 } else {
+                    console.log(data);
                     alert("error");
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => console.error("paia"));
     })
 
 

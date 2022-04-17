@@ -14,18 +14,19 @@ const createOrder = async (req, res) => {
 
         const getBuyer = await marketplace.getBuyer(uid);
         const shop_car_id = await marketplace.createShoppingCart(getBuyer);
-    
-
-        
-
         let price = 0
+
+        console.log('shopping car ', shop_car_id);
+
 
         shoppingCart.forEach(async (product) => {
             const productItem = `INSERT INTO public.product_items(product_id, shopping_car_id) VALUES ('${product.product_id}', '${shop_car_id}') RETURNING id`;
             const result = await marketplace.query(productItem);
-            price = price + product.product_price;
-            
+            price += parseInt(product.product_price);
+
         });
+
+
 
         const checkOutProcess = `INSERT INTO public.checkout_process(shopping_car_id, buyer_id) VALUES ('${shop_car_id}', '${getBuyer}') RETURNING id`;
         const checkOutProcess_id = await marketplace.query(checkOutProcess);
@@ -36,8 +37,7 @@ const createOrder = async (req, res) => {
 
         res.json({
             ok: true,
-            message: `order ${order} successfully`,
-            order_id: order
+            message: 'Orden creada correctamente'
         });
 
     } else {
@@ -54,6 +54,6 @@ const createOrder = async (req, res) => {
 
 
 
-    module.exports = {
-        createOrder
-    }
+module.exports = {
+    createOrder
+}

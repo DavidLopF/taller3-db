@@ -95,7 +95,7 @@ CREATE TABLE public.checkout_process(
     shopping_car_id INTEGER NOT NULL,
     FOREIGN KEY (shopping_car_id) REFERENCES public.shopping_cars(id) ON DELETE CASCADE,
     buyer_id INTEGER NOT NULL,
-    FOREIGN KEY (shopping_car_id) REFERENCES public.buyer(id) ON DELETE CASCADE,
+    FOREIGN KEY (buyer_id) REFERENCES public.buyer(id) ON DELETE CASCADE,
     created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

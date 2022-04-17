@@ -36,7 +36,7 @@ class PostgresConection {
     }
 
     async createShoppingCart(buyerId) {
-        const query = `INSERT INTO public.shopping_cars(buyer_id) VALUES (${buyerId}) RETURNING id`;
+        const query = `INSERT INTO public.shopping_cars(buyer_id) VALUES ('${buyerId}') RETURNING id`;
         const result = await this.query(query);
         return result.rows[0].id;
     }

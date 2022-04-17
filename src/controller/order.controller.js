@@ -1,3 +1,4 @@
+const { render } = require('express/lib/response');
 const jwt = require('jsonwebtoken');
 const Marketplace = require('../db/postgres');
 const marketplace = new Marketplace();
@@ -20,16 +21,17 @@ const getViewOrder = function (req, res) {
     });
 }
 
-const getAllOrders = function (req, res) {
-    const query = `SELECT * FROM public.order`;
-    marketplace.query(query).then((result) => {
-        res.json({
-            ok: true,
-            orders: result.rows
-        });
-    });
-
+const getAllOrdersView = (req, res) => {
+    res.render('orders');
 }
+
+const getAllOrders = async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const { uid } = jwt.verify(token, process.env.TOKEN_BUYER);
+    console.log(uid);
+}
+
+
 
 const createOrder = async (req, res) => {
 
@@ -86,5 +88,6 @@ const createOrder = async (req, res) => {
 module.exports = {
     createOrder,
     getViewOrder,
+    getAllOrdersView,
     getAllOrders
 }

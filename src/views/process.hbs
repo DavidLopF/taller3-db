@@ -93,6 +93,21 @@
     </div>
 </section>
 
+<div class="modal rounded" id="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__slideInUp">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Alert</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <p id="msg_modal"></p>
+        </section>
+        <button class="modal-close is-large" id="close" aria-label="close"></button>
+    </div>
+</div>
+
+
 <script type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRujBBR7smNV8d_DYuABXbWAYlVvED0wY"></script>
 <script>
@@ -110,17 +125,20 @@
     let total = document.getElementById('total-price');
     total = total.innerHTML;
 
-    //obtener la latitud a partir de la direccion usando el api de google
+    //VALIDAR que todos los campos esten llenos
+
 
 
 
     function getLatLng(address) {
+        console.log(address);
         return new Promise(function (resolve, reject) {
             let geocoder = new google.maps.Geocoder();
             geocoder.geocode({
-                'address': address.value + " " + city
+                'address': address + ', ' + city
             }, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
+                    console.log(results[0].geometry.location);
                     const location = {
                         lat: results[0].geometry.location.lat(),
                         lng: results[0].geometry.location.lng()
@@ -138,41 +156,73 @@
 
 
 
+
+
     order.addEventListener('click', async () => {
-        address = await getLatLng(address.value)
 
-        const data1 = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token1}`
-            },
-            body: JSON.stringify({
-                shoppingCart: shoppingCart,
-                address: address,
-                payment: {
-                    method: method_payment,
-                    card_number: card_number.value,
-                    date_expired: date_expired.value,
-                    cvc: cvc.value,
-                    price: total.innerHTML
+
+        if (address.value == '' || city == '' || method_payment == '' || card_number.value == '' || date_expired.value == '' || cvc.value == '') {
+
+
+            document.getElementById('modal').classList.add('is-active');
+            document.getElementById('msg_modal').innerHTML = 'Por favor llene todos los campos';
+            document.getElementById('close').addEventListener('click', function () {
+                document.getElementById('modal').classList.remove('is-active');
+            });
+
+        } else if (card_number.value.length < 16) {
+            document.getElementById('modal').classList.add('is-active');
+            document.getElementById('msg_modal').innerHTML = 'Por favor ingrese un número de tarjeta válido';
+            document.getElementById('close').addEventListener('click', function () {
+                document.getElementById('modal').classList.remove('is-active');
+            });
+        } else {
+
+            address = await getLatLng(address.value)
+            console.log(address);
+
+            const data1 = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token1}`
                 },
-            })
-        };
+                body: JSON.stringify({
+                    shoppingCart: shoppingCart,
+                    address: address,
+                    payment: {
+                        method: method_payment,
+                        card_number: card_number.value,
+                        date_expired: date_expired.value,
+                        cvc: cvc.value,
+                        price: total.innerHTML
+                    },
+                })
+            };
 
-        fetch('/order/create', data1)
-            .then(response => response.json())
-            .then(data => {
-                //aqui va el codigo para redireccionar a la pagina de order
-                if (data.ok) {
-                    localStorage.removeItem('shopping_cart');
-                    window.location.href = '/order/' + data.order_id;
-                } else {
-                    console.log(data);
-                    alert("error");
-                }
-            })
-            .catch(error => console.error("paia"));
+
+
+            /*fetch('/order/create', data1)
+                    .then(response => response.json())
+                    .then(data => {
+                        //aqui va el codigo para redireccionar a la pagina de order
+                        if (data.ok) {
+                            localStorage.removeItem('shopping_cart');
+                            window.location.href = '/order/' + data.order_id;
+                        } else {
+                            console.log(data.error);
+                            document.getElementById('modal').classList.add('is-active');
+                            document.getElementById('msg_modal').innerHTML = data.errors[0].msg
+        
+                            document.getElementById('close').addEventListener('click', () => {
+                                document.getElementById('modal').classList.remove('is-active');
+                            })
+        
+        
+                        }
+                    })
+                    .catch(error => console.error("paila"));*/
+        }
     })
 
 

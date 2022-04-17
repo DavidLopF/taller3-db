@@ -16,8 +16,12 @@ class MongoConection {
     }
 
     async insert(model, data) {
-        const result = await model.create(data);
-        return result;
+        try{
+            const result = await model.create(data);
+            return result;
+        }catch(err){
+            console.log(colors.red(err));
+        }
     }
 
     

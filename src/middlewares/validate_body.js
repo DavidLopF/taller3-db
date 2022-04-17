@@ -28,7 +28,22 @@ const validateLogin = (req, res, next) => {
 }
 
 
+const validateShoppingCart = (req, res, next) => {
+    const { shoppingCart} = req.body;
+
+    if (!shoppingCart) {
+        return res.status(400).json({
+            ok: false,
+            message: 'Shopping cart is empty'
+        })
+    }
+
+    next();
+}
+
+
 module.exports = {
     validateRegisterBody,
-    validateLogin
+    validateLogin,
+    validateShoppingCart
 }

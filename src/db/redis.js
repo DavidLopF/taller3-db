@@ -43,6 +43,16 @@ class RedisConection {
         }
     }
 
+    async delete_shoppingCart(key) {
+        try {
+            await this.client.del(key);
+            return true
+        } catch (err) {
+            console.log(colors.red(err));
+            return false
+        }
+    }
+
     async add_shoppingCart(key, shopingcart) {
         try {
             await this.client.set(key, shopingcart);

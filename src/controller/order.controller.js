@@ -2,11 +2,10 @@ const { render } = require('express/lib/response');
 const jwt = require('jsonwebtoken');
 const Marketplace = require('../db/postgres');
 const marketplace = new Marketplace();
-const Mongo = require('../db/mongo');
-const mongo = new Mongo();
 const Redis = require('../db/redis');
 const { red } = require('colors');
 const redis = new Redis();
+const Order = require('../models/order');
 
 const getViewOrder = function (req, res) {
     const id = req.params.id;
@@ -70,20 +69,23 @@ const createOrder = async (req, res) => {
         const card_id = await marketplace.validateCard(payment, getBuyer);
         const payment_final = await marketplace.createPayment(paymentType, card_id);
         const order = await marketplace.createOrder(payment_final, getBuyer, checkOutProcess_id, shop_car_id, price);
-        
+
         console.log(`shopping_cart_${getBuyer}`);
         await redis.delete_shoppingCart(`shopping_cart_${getBuyer}`);
 
-        // guardar la orden en mongo y la direccion como type coords
-        // const order_json = {
-        //     order_id: order.rows[0].id,
-        //     buyer_id: getBuyer,
-        //     payment_id: payment_final,
-        //     checkout_process_id: checkOutProcess_id,
-        //     shopping_car_id: shop_car_id,
-        //     price: price,
-        //     address: address
-        // }
+        //guardar la orden en mongo y la direccion como type coords
+        const order_json = {
+            order_id: order,
+            buyer_id: getBuyer,
+            payment_id: payment_final,
+            checkout_process_id: checkOutProcess_id.rows[0].id,
+            shopping_car_id: shop_car_id,
+            price: price,
+            address: address
+        }
+
+        const order_mongo = new Order(order_json);
+        await order_mongo.save();
 
         res.json({
             ok: true,

@@ -137,8 +137,9 @@
             .then(response => response.json())
             .then(data => {
                 //aqui va el codigo para redireccionar a la pagina de order
+                console.log(data.order_id);
                 if (data.ok) {
-                    //localStorage.removeItem('shopping_cart');
+                    localStorage.removeItem('shopping_cart');
                     window.location.href = '/order/' + data.order_id;
                 } else {
                     console.log(data);

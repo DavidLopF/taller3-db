@@ -23,12 +23,21 @@ const getViewOrder = function (req, res) {
 
 const getAllOrdersView = (req, res) => {
     res.render('orders');
+    
 }
 
 const getAllOrders = async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const { uid } = jwt.verify(token, process.env.TOKEN_BUYER);
-    console.log(uid);
+    const getBuyer = await marketplace.getBuyer(uid);
+    const query = `SELECT * FROM public.order WHERE buyer_id = ${getBuyer} AND status = 'en preparacion'`;
+    const result = await marketplace.query(query);
+    res.json({
+        status: 'success',
+        orders: result.rows
+    });
+
+    
 }
 
 

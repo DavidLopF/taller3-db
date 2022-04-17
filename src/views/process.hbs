@@ -93,12 +93,14 @@
     </div>
 </section>
 
+<script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRujBBR7smNV8d_DYuABXbWAYlVvED0wY"></script>
 <script>
     const shoppingCart = JSON.parse(localStorage.getItem('shopping_cart'));
     const order = document.getElementById('order');
     let city = document.getElementById('city');
     city = city.options[city.selectedIndex].value;
-    const address = document.getElementById('address');
+    let address = document.getElementById('address');
     let method_payment = document.getElementById('method_payment');
     method_payment = method_payment.options[method_payment.selectedIndex].value;
     const card_number = document.getElementById('card_number');
@@ -108,10 +110,36 @@
     let total = document.getElementById('total-price');
     total = total.innerHTML;
 
-    console.log(total);
+    //obtener la latitud a partir de la direccion usando el api de google
 
 
-    order.addEventListener('click', () => {
+
+    function getLatLng(address) {
+        return new Promise(function (resolve, reject) {
+            let geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+                'address': address.value + " " + city
+            }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    const location = {
+                        lat: results[0].geometry.location.lat(),
+                        lng: results[0].geometry.location.lng()
+
+                    }
+                    resolve(location);
+                } else {
+                    reject(status);
+                }
+            });
+        });
+    }
+
+
+
+
+
+    order.addEventListener('click', async () => {
+        address = await getLatLng(address.value)
 
         const data1 = {
             method: 'POST',
@@ -121,8 +149,7 @@
             },
             body: JSON.stringify({
                 shoppingCart: shoppingCart,
-                city: city,
-                address: address.value,
+                address: address,
                 payment: {
                     method: method_payment,
                     card_number: card_number.value,
@@ -138,7 +165,7 @@
             .then(data => {
                 //aqui va el codigo para redireccionar a la pagina de order
                 if (data.ok) {
-                    //localStorage.removeItem('shopping_cart');
+                    localStorage.removeItem('shopping_cart');
                     window.location.href = '/order/' + data.order_id;
                 } else {
                     console.log(data);

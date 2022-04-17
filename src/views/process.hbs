@@ -122,13 +122,6 @@
     const date_expired = document.getElementById('date_expired');
     const cvc = document.getElementById('cvc');
     const token1 = localStorage.getItem('token');
-    let total = document.getElementById('total-price');
-    total = total.innerHTML;
-
-    //VALIDAR que todos los campos esten llenos
-
-
-
 
     function getLatLng(address) {
         console.log(address);
@@ -145,16 +138,13 @@
 
                     }
                     resolve(location);
+
                 } else {
                     reject(status);
                 }
             });
         });
     }
-
-
-
-
 
 
 

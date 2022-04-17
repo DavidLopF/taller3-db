@@ -2,7 +2,34 @@ const jwt = require('jsonwebtoken');
 const Marketplace = require('../db/postgres');
 const marketplace = new Marketplace();
 
+const getViewOrder = function (req, res) {
+    const id = req.params.id;
+    const query = `SELECT * FROM public.order WHERE id = ${id}`;
+    marketplace.query(query).then((result) => {
+        const user_id = `SELECT * FROM public.buyer b JOIN public.user u ON b.user_id = u.id WHERE b.id = ${result.rows[0].buyer_id}`;
+        marketplace.query(user_id).then((result2) => {
+            const products = `SELECT * FROM public.product_items AS pi INNER JOIN public.products AS pr ON pi.product_id = pr.id INNER JOIN public.product_details AS pd ON pr.id = pd.product_id where shopping_car_id = ${result.rows[0].shopping_car_id}`;
+            marketplace.query(products).then((result3) => {
+                res.render(`order`, {
+                    order: result.rows[0],
+                    user: result2.rows[0],
+                    products: result3.rows
+                });
+            });
+        });
+    });
+}
 
+const getAllOrders = function (req, res) {
+    const query = `SELECT * FROM public.order`;
+    marketplace.query(query).then((result) => {
+        res.json({
+            ok: true,
+            orders: result.rows
+        });
+    });
+
+}
 
 const createOrder = async (req, res) => {
 
@@ -37,7 +64,9 @@ const createOrder = async (req, res) => {
 
         res.json({
             ok: true,
-            message: 'Orden creada correctamente'
+            message: 'Orden creada correctamente',
+            order_id: order,
+            shopping_car_id: shop_car_id
         });
 
     } else {
@@ -55,5 +84,7 @@ const createOrder = async (req, res) => {
 
 
 module.exports = {
-    createOrder
+    createOrder,
+    getViewOrder,
+    getAllOrders
 }

@@ -1,13 +1,19 @@
 const jwt = require('jsonwebtoken');
 const Cache = require('../db/redis')
 const cache = new Cache()
+const Marketplace = require('../db/postgres')
+const marketplace = new Marketplace()
+
 
 const addProduct = async (req, res) => {
     let token = req.headers.authorization.split(" ")[1];
     const { uid } = jwt.verify(token, process.env.TOKEN_BUYER);
     const { product } = req.body
 
-    const getShoppingCart = await cache.get(`shopping_cart_${uid}`)
+
+    const getBuyer = await marketplace.getBuyer(uid);
+
+    const getShoppingCart = await cache.get(`shopping_cart_${getBuyer}`)
     if (getShoppingCart) {
 
         const shopingcart = JSON.parse(getShoppingCart)
@@ -21,7 +27,7 @@ const addProduct = async (req, res) => {
             product_image: product.image
         })
 
-        cache.add_shoppingCart(`shopping_cart_${uid}`, JSON.stringify(shopingcart))
+        cache.add_shoppingCart(`shopping_cart_${getBuyer}`, JSON.stringify(shopingcart))
 
         res.status(200).json({
             ok: true,
@@ -30,7 +36,7 @@ const addProduct = async (req, res) => {
 
     } else {
         const shopingcart = {
-            user_id: uid,
+            user_id: getBuyer,
             products: [{
                 product_id: product.id,
                 product_name: product.name,
@@ -40,7 +46,7 @@ const addProduct = async (req, res) => {
                 product_image: product.image
             }]
         }
-        const temp = await cache.add_shoppingCart('shopping_cart_' + uid, JSON.stringify(shopingcart));
+        const temp = await cache.add_shoppingCart('shopping_cart_' + getBuyer, JSON.stringify(shopingcart));
         if (temp) {
             res.status(200).json({
                 ok: true,
@@ -61,7 +67,8 @@ const getShoppingCart = async (req, res) => {
     let token = req.headers.authorization.split(" ")[1];
     const { uid } = jwt.verify(token, process.env.TOKEN_BUYER);
 
-    const getShoppingCart = await cache.get(`shopping_cart_${uid}`)
+    const getBuyer = await marketplace.getBuyer(uid);
+    const getShoppingCart = await cache.get(`shopping_cart_${getBuyer}`)
     if (getShoppingCart) {
         res.status(200).json({
             ok: true,
@@ -73,7 +80,7 @@ const getShoppingCart = async (req, res) => {
             ok: true,
             message: 'shopping cart',
             shopping_cart: {
-                user_id: uid,
+                user_id: getBuyer,
                 products: []
             }
         })

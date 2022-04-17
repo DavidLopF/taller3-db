@@ -12,16 +12,13 @@
 2. Briannys Paez
 3. David Lopez
 
-# Instrucciones
-1. Tener node instalado, esto se puede verificar con:
+# Info importante 
 
-        node --version  
-        npm --version
-    si no lo tienes instalado aqui esta el link xD https://nodejs.org/es/
-2. Clonar el repositorio
-3. Instalar paquetes necesarios para correr el servidor
+1. Clonar el repositorio
+2. Instalar paquetes necesarios para correr el servidor
 
         npm install
-4. Correr el servidor con:
+3. Correr el servidor con:
    
         npm start
+4. Se implemento el api de google para javascript con el fin de tomar la latitud y la longitud al momento de ralizar la compra. 

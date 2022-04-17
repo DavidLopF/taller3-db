@@ -36,7 +36,7 @@ const register = (req, res) => {
 
                                 res.render('user', {
                                     user,
-                                    supplier: true, 
+                                    supplier: true,
                                     token
                                 });
                             })
@@ -46,11 +46,13 @@ const register = (req, res) => {
                             .then(async result => {
 
                                 const token = await generateJSW_Buyer(id);
-                                res.status(200).json({
-                                    ok: true,
+
+                                res.render('user', {
+                                    user,
                                     buyer: true,
                                     token
-                                })
+                                });
+
                             })
                     }
 

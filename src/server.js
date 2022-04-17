@@ -4,8 +4,9 @@ const logger = require('morgan');
 const path = require('path');
 const colors = require('colors');
 const hbs = require('express-handlebars');
-const postgres = require('./db/postgres');
-const marketplace = new postgres();
+const { dbConection } = require("./db/mongo");
+const Marketplace = require('./db/postgres');
+const marketplace = new Marketplace();
 
 
 class Server {
@@ -19,7 +20,7 @@ class Server {
 
 
         this.midelwares();
-
+        this.database();
         //routes
         this.user = '/user';
         this.auth = '/auth';
@@ -58,6 +59,10 @@ class Server {
         });
 
 
+    }
+
+    async database() {
+        await dbConection();
     }
 
     midelwares() {
